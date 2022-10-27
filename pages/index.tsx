@@ -5,13 +5,10 @@ import Image from "next/image";
 import { MediaRenderer } from "@thirdweb-dev/react";
 
 export default function Home() {
-  // Queries
   const { data, isLoading } = useQuery(
     ["mostFollowedProfiles"],
     mostFollowedProfiles
   );
-
-  console.log(data);
 
   return (
     <>
@@ -32,9 +29,9 @@ export default function Home() {
             alt="sol"
           />
         </div>
-        <h1 className={styles.h1}>Lens, meet thirdweb 👋</h1>
+        <h1 className={styles.h1}>Lens Starter Kit</h1>
         <p className={styles.explain}>
-          Build a simple application with thirdweb and Lens Protocol.
+          Build a simple application using thirdweb and Lens!
         </p>
 
         <div className={styles.profileGrid}>
@@ -59,7 +56,7 @@ export default function Home() {
                     }}
                   />
                   <h2 className={styles.profileName}>{profile.name}</h2>
-                  <p className={styles.profileBio}>@{profile.handle}</p>
+                  <p className={styles.profileHandle}>@{profile.handle}</p>
                 </a>
               ))
             )
