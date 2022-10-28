@@ -1,4 +1,4 @@
-import client from "../initClient";
+import { basicClient } from "../initClient";
 
 export const getPublicationsQuery = `
   query Publications($id: ProfileId!, $limit: LimitScalar) {
@@ -37,14 +37,12 @@ export const getPublicationsQuery = `
 `;
 
 async function getPublications(profileId: string, limit: number): Promise<any> {
-  const response = await client
+  const response = await basicClient
     .query(getPublicationsQuery, {
       id: profileId,
       limit: limit,
     })
     .toPromise();
-
-  console.log(response);
 
   return response.data.publications.items as any[];
 }

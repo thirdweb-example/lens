@@ -1,5 +1,5 @@
 import Profile from "../../types/Profile";
-import client from "../initClient";
+import { basicClient } from "../initClient";
 
 const exploreProfiles = `
 query ExploreProfiles {
@@ -25,7 +25,7 @@ query ExploreProfiles {
 `;
 
 async function mostFollowedProfiles(): Promise<Profile[]> {
-  const response = await client.query(exploreProfiles, {}).toPromise();
+  const response = await basicClient.query(exploreProfiles, {}).toPromise();
   return response.data.exploreProfiles.items as Profile[];
 }
 

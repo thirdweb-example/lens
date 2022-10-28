@@ -1,5 +1,5 @@
 import Profile from "../../types/Profile";
-import client from "../initClient";
+import { basicClient } from "../initClient";
 
 export const getProfileQuery = `
 query Profile($handle: Handle!) {
@@ -20,7 +20,7 @@ query Profile($handle: Handle!) {
 `;
 
 async function getProfile(handle: string): Promise<Profile> {
-  const response = await client
+  const response = await basicClient
     .query(getProfileQuery, {
       handle,
     })
