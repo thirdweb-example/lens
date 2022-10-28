@@ -1,3 +1,6 @@
+// Modified from official Lens example:
+// https://github.com/lens-protocol/api-examples/blob/master/src/helpers.ts
+
 import omitDeep from "omit-deep";
 
 export const prettyJSON = (message: string, obj: string) => {

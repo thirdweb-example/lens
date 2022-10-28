@@ -14,6 +14,12 @@ const refreshMutation = `
   }
 `;
 
+/**
+ * An access token is sent to the API to authenticate the user.
+ * The access token expires after 30 minutes.
+ * The refresh token can be used to get a new access token.
+ * This function loads the refresh token from local storage and uses it to get a new access token.
+ */
 export const refreshAccessToken = async () => {
   const localStorageValue = localStorage.getItem(STORAGE_KEY);
   if (!localStorageValue) return null;

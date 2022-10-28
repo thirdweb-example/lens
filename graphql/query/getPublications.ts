@@ -36,6 +36,9 @@ export const getPublicationsQuery = `
   }
 `;
 
+/**
+ * Load a user's publications by their profile id.
+ */
 async function getPublications(profileId: string, limit: number): Promise<any> {
   const response = await basicClient
     .query(getPublicationsQuery, {

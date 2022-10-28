@@ -4,6 +4,9 @@ import { authenticate } from "../graphql/auth/getAccessToken";
 import { STORAGE_KEY } from "../graphql/initClient";
 import parseJwt from "./parseJwt";
 
+/**
+ * Function that signs the user into Lens by generating a challenge and signing it with their wallet.
+ */
 export default async function login(address: string, sdk: ThirdwebSDK) {
   if (!address || !sdk) return;
 
@@ -23,7 +26,7 @@ export default async function login(address: string, sdk: ThirdwebSDK) {
     // Now let's store the authentication information in local storage
     const accessTokenData = parseJwt(accessToken);
     localStorage.setItem(
-      STORAGE_KEY,
+      STORAGE_KEY, // This is the key we use to store the authentication information in local storage
       JSON.stringify({
         accessToken,
         refreshToken,

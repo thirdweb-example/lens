@@ -1,3 +1,6 @@
+// Modified from official Lens example:
+// https://github.com/lens-protocol/api-examples/blob/master/src/ethers.service.ts
+
 import { TypedDataDomain } from "@ethersproject/abstract-signer";
 import { utils } from "ethers";
 import { omit } from "./helpers";

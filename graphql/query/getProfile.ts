@@ -19,6 +19,9 @@ query Profile($handle: Handle!) {
 }
 `;
 
+/**
+ * Load a user's profile by their handle.
+ */
 async function getProfile(handle: string): Promise<Profile> {
   const response = await basicClient
     .query(getProfileQuery, {

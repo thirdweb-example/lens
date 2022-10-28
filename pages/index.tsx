@@ -5,6 +5,7 @@ import Image from "next/image";
 import { MediaRenderer } from "@thirdweb-dev/react";
 
 export default function Home() {
+  // Load the top 25 most followed Lens profiles
   const { data, isLoading } = useQuery(
     ["mostFollowedProfiles"],
     mostFollowedProfiles
@@ -35,32 +36,29 @@ export default function Home() {
         </p>
 
         <div className={styles.profileGrid}>
-          {
-            // Display the most followed profiles
-            isLoading ? (
-              <p>Loading...</p>
-            ) : (
-              data?.map((profile) => (
-                <a
-                  href={`/profile/${profile.handle}`}
-                  className={styles.profileContainer}
-                  key={profile.id}
-                >
-                  <MediaRenderer
-                    src={profile?.picture?.original?.url || ""}
-                    style={{
-                      borderRadius: "50%",
-                      width: "64px",
-                      height: "64px",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <h2 className={styles.profileName}>{profile.name}</h2>
-                  <p className={styles.profileHandle}>@{profile.handle}</p>
-                </a>
-              ))
-            )
-          }
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            data?.map((profile) => (
+              <a
+                href={`/profile/${profile.handle}`}
+                className={styles.profileContainer}
+                key={profile.id}
+              >
+                <MediaRenderer
+                  src={profile?.picture?.original?.url || ""}
+                  style={{
+                    borderRadius: "50%",
+                    width: "64px",
+                    height: "64px",
+                    objectFit: "cover",
+                  }}
+                />
+                <h2 className={styles.profileName}>{profile.name}</h2>
+                <p className={styles.profileHandle}>@{profile.handle}</p>
+              </a>
+            ))
+          )}
         </div>
       </div>
     </>

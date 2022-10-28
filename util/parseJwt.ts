@@ -1,3 +1,7 @@
+/**
+ * Utility function for parsing JWT tokens such as those returned by the
+ * Lens GraphQL API (access tokens and refresh tokens).
+ */
 export default function parseJwt(token: string) {
   var base64Url = token.split(".")[1];
   var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");

@@ -29,6 +29,11 @@ mutation($request: FollowRequest!) {
 }
 `;
 
+/**
+ * This uses the authenticated urql client (meaning we send the access token with the request)
+ * It creates a follow signature that we can send to the Lens smart contract to call
+ * the followWithSig function to follow a user.
+ */
 export const followUser = async (profileId: string) => {
   const authenticatedClient = await createClient();
 

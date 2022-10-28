@@ -1,5 +1,5 @@
+// Learn how we use the thirdweb SDK to connect to the Lens smart contract using it's ABI:
 // https://blog.thirdweb.com/guides/how-to-use-any-smart-contract-with-thirdweb-sdk-using-abi/
-// https://polygonscan.com/address/0xdb46d1dc155634fbc732f92e853b10b288ad5a1d#code
 export const LENS_PROTOCOL_PROFILES_ABI = [
   {
     inputs: [

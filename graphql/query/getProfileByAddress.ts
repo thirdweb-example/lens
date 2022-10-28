@@ -21,8 +21,7 @@ query Profile($address: EthereumAddress!) {
 
 /**
  * Get a Lens Profile using a wallet address
- * @param address: Wallet address
- * @returns Profile or null if user doesn't have a lens profile
+ * Returns null if the user does not have a profile
  */
 async function getProfileByAddress(address: string): Promise<Profile | null> {
   const response = await basicClient
