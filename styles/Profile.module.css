@@ -42,3 +42,25 @@
   max-width: 1000px;
   gap: 1em;
 }
+
+.followButton {
+  background-color: var(--tw-color1);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border: none;
+}
+
+.following {
+  opacity: 0.75;
+  padding: 0px;
+  margin: 0px;
+}
+
+.followButton:hover {
+  background-color: var(--tw-color1-hover);
+  cursor: pointer;
+  transition: 0.6s;
+}

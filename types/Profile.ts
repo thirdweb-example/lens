@@ -9,7 +9,7 @@ type Profile = {
     };
   };
   stats: {
-    totalFollowers: 55587;
+    totalFollowers: number;
   };
   __typename: "Profile";
 };
