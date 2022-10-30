@@ -33,3 +33,24 @@
   color: #fff;
   font-size: 1.25rem;
 }
+
+.profileName {
+  margin-right: 8px;
+}
+
+.signInButton {
+  background-color: var(--tw-color1);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border: none;
+  margin-right: 12px;
+}
+
+.signInButton:hover {
+  background-color: var(--tw-color1-hover);
+  cursor: pointer;
+  transition: 0.6s;
+}

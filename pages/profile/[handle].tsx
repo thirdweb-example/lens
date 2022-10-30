@@ -1,11 +1,19 @@
 import { useRouter } from "next/router";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   MediaRenderer,
   useAddress,
+  useContract,
   useSDK,
   useSigner,
+  Web3Button,
 } from "@thirdweb-dev/react";
 import getProfile from "../../graphql/query/getProfile";
 import getPublications from "../../graphql/query/getPublications";
@@ -18,6 +26,7 @@ import { LENS_HUB_CONTRACT_ADDRESS } from "../../graphql/initClient";
 import { LENS_PROTOCOL_PROFILES_ABI } from "../../const/abis";
 import { signedTypeData, splitSignature } from "../../util/ethers.service";
 import styles from "../../styles/Profile.module.css";
+import doesFollowUser from "../../graphql/query/doesFollowUser";
 
 /**
  * Dynamic route to display a Lens profile and their publications given a handle
@@ -27,12 +36,15 @@ export default function ProfilePage() {
   const router = useRouter();
   const { handle } = router.query;
 
-  // Get the currently connected wallet address
-  const address = useAddress();
-
   // Get the SDK and signer for us to use for interacting with the lens smart contract
   const sdk = useSDK();
   const signer = useSigner();
+
+  // React Query
+  const queryClient = useQueryClient();
+
+  // Get the currently connected wallet address
+  const address = useAddress();
 
   // See if we need to sign the user in before they try follow a user
   const { isSignedIn } = useLensUser();
@@ -54,19 +66,44 @@ export default function ProfilePage() {
     }
   );
 
+  // Check to see if the connected wallet address follows this user
+  const { data: doesFollow } = useQuery(
+    ["follows", address, profile?.id],
+    () => doesFollowUser(address as string, profile?.id as string),
+    {
+      // Only run this query if the profile is loaded
+      enabled: !!profile && !!address,
+    }
+  );
+
+  // Connect to the Lens Hub smart contract using it's ABI and address
+  const { contract: lensHubContract } = useContract(
+    LENS_HUB_CONTRACT_ADDRESS,
+    LENS_PROTOCOL_PROFILES_ABI
+  );
+
+  const { mutateAsync: follow } = useMutation(() => followThisUser(), {
+    // When the mutation is successful, invalidate the doesFollow query so it will re-run
+    onSuccess: () => {
+      queryClient.setQueryData(["follows", address, profile?.id], true);
+    },
+  });
+
   // Follow the user when the follow button is clicked
   // This function does the following:
   // 1. Runs the followUser GraphQL Mutation to generate a typedData object
   // 2. Signs the typedData object with the user's wallet
   // 3. Sends the signature to the smart contract to follow the user,
   // by calling the "followWithSig" function on the LensHub contract
-  async function followThisUser(id: string) {
+  async function followThisUser() {
     if (!isSignedIn) {
       if (address && sdk) await login(address, sdk);
     }
 
+    if (!profile || !signer) return;
+
     // 1. Runs the followUser GraphQL Mutation to generate a typedData object
-    const result = await followUser(id as string);
+    const result = await followUser(profile.id);
     const typedData = result.typedData;
 
     // 2. Signs the typedData object with the user's wallet
@@ -79,10 +116,6 @@ export default function ProfilePage() {
 
     // 3. Sends the signature to the smart contract to follow the user,
     const { v, r, s } = splitSignature(signature);
-    const lensHubContract = await sdk?.getContractFromAbi(
-      LENS_HUB_CONTRACT_ADDRESS,
-      LENS_PROTOCOL_PROFILES_ABI
-    );
 
     try {
       const tx = await lensHubContract?.call("followWithSig", {
@@ -97,7 +130,9 @@ export default function ProfilePage() {
         },
       });
 
-      console.log("follow: tx", tx);
+      console.log("Followed user", tx);
+
+      return tx;
     } catch (error) {
       console.error(error);
     }
@@ -126,12 +161,20 @@ export default function ProfilePage() {
         <h1 className={styles.profileName}>{profile?.name}</h1>
         <p className={styles.profileHandle}>@{profile?.handle}</p>
 
-        <button
-          onClick={() => followThisUser(profile.id)}
-          className={styles.followButton}
-        >
-          Follow
-        </button>
+        {doesFollow ? (
+          <b className={styles.following}>Following</b>
+        ) : (
+          <Web3Button
+            contractAddress={LENS_HUB_CONTRACT_ADDRESS}
+            contractAbi={LENS_PROTOCOL_PROFILES_ABI}
+            colorMode="dark"
+            accentColor="#f213a4"
+            action={() => follow()}
+            className={styles.followButton}
+          >
+            Follow
+          </Web3Button>
+        )}
 
         <p className={styles.profileBio}>{profile.bio}</p>
       </div>

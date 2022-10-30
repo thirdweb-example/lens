@@ -53,6 +53,12 @@
   border: none;
 }
 
+.following {
+  opacity: 0.75;
+  padding: 0px;
+  margin: 0px;
+}
+
 .followButton:hover {
   background-color: var(--tw-color1-hover);
   cursor: pointer;

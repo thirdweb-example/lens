@@ -36,7 +36,7 @@ export default function useLensUser() {
     }
 
     setLoadingSignIn(false);
-  }, [address, typeof window]);
+  }, [address]);
 
   // If they're signed in, we load their profile by querying the API
   const { data: profile, isLoading: loadingProfile } = useQuery(
@@ -49,6 +49,7 @@ export default function useLensUser() {
 
   return {
     isSignedIn,
+    setIsSignedIn,
     loadingSignIn,
     profile,
     loadingProfile,

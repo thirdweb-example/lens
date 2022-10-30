@@ -49,7 +49,5 @@ export const followUser = async (profileId: string) => {
     })
     .toPromise();
 
-  console.log("followed user", response);
-
   return response.data.createFollowTypedData;
 };
