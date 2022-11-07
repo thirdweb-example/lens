@@ -1,4 +1,4 @@
-import client from "../initClient";
+import { basicClient } from "../initClient";
 import ProtocolStats from "../../types/ProtocolStats";
 
 const protocolStats = `
@@ -25,7 +25,7 @@ query GlobalProtocolStats {
 `;
 
 async function globalProtocolStats(): Promise<ProtocolStats> {
-    const response = await client.query(protocolStats, {}).toPromise();
+    const response = await basicClient.query(protocolStats, {}).toPromise();
     return response.data.globalProtocolStats as ProtocolStats;
 }
 

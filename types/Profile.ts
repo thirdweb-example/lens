@@ -4,12 +4,14 @@ type Profile = {
   bio: string;
   handle: string;
   picture: {
+    uri: string | null;
     original: {
       url: string;
     };
+    __typename: string;
   };
   stats: {
-    totalFollowers: 55587;
+    totalFollowers: number;
   };
   __typename: "Profile";
 };

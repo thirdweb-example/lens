@@ -1,45 +1,49 @@
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {useState} from "react";
+import { useState } from "react";
+import AccountDropdown from "./AccountDropdown";
 
 export default function Header() {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
+    const [searchText, setSearchText] = useState("")
+
+    let inputHandler = (e: any) => {
+        setSearchText(e.target.value)
+    }
 
     let toggleIsOpen = () => {
         setIsOpen(!isOpen)
     }
+
+    let search = async (e: any) => {
+        if (e.key === 'Enter') {
+            await router.push('/profiles?search=' + searchText)
+        }
+    }
+
   return (
       <>
           <nav className="navbar bg-base-100 justify-between gap-2">
               <div className="flex">
                   <img src='/icon.webp' alt='lenstats icon' className='mr-2 w-12 h-12' />
                   <div className="form-control mr-2 hidden lg:block">
-                      <input type="text" placeholder="Search" className="input input-bordered" />
+                      <input
+                          type="text"
+                          placeholder="Search"
+                          className="input input-bordered"
+                          onKeyDown={search}
+                          onChange={inputHandler}
+                      />
                   </div>
                   <ul className="hidden lg:flex menu menu-horizontal font-semibold p-0 gap-2">
-                      <li><Link href='/' className={router.pathname === '/' ? 'active' : ''}>Home</Link></li>
-                      <li><Link href='/leaderboard' className={router.pathname === '/leaderboard' ? 'active' : ''}>Leaderboard</Link></li>
-                      <li><Link href='/giveaway' className={router.pathname === '/giveaway' ? 'active' : ''}>Giveaway</Link></li>
-                      <li><Link href='/explore' className={router.pathname === '/explore' ? 'active' : ''}>Explore</Link></li>
+                      <li><Link href='/' className={router.pathname === '/' ? 'btn-active' : ''}>Home</Link></li>
+                      <li><Link href='/leaderboard' className={router.pathname === '/leaderboard' ? 'btn-active' : ''}>Leaderboard</Link></li>
+                      <li><Link href='/giveaway' className={router.pathname === '/giveaway' ? 'btn-active' : ''}>Giveaway</Link></li>
+                      <li><Link href='/explore' className={router.pathname === '/explore' ? 'btn-active' : ''}>Explore</Link></li>
                   </ul>
               </div>
               <div className="flex gap-2">
-                  <div className="hidden lg:block dropdown dropdown-end">
-                      <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                          <div className="w-10 rounded-full">
-                              <img src="https://placeimg.com/80/80/people" />
-                          </div>
-                      </label>
-                      <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
-                          <li>
-                              <a className="justify-between">
-                                  My profile
-                              </a>
-                          </li>
-                          <li><a>Logout</a></li>
-                      </ul>
-                  </div>
                   <button className="lg:hidden btn btn-square btn-ghost" onClick={toggleIsOpen}>
                       {
                           isOpen ? (
@@ -53,16 +57,19 @@ export default function Header() {
                           )
                       }
                   </button>
+                  <AccountDropdown />
               </div>
           </nav>
           {
               isOpen && (
-                  <ul className="menu bg-base-100 w-full p-2 rounded-box gap-2">
-                      <li><Link href='/' className={router.pathname === '/' ? 'active' : ''}>Home</Link></li>
-                      <li><Link href='/leaderboard' className={router.pathname === '/leaderboard' ? 'active' : ''}>Leaderboard</Link></li>
-                      <li><Link href='/giveaway' className={router.pathname === '/giveaway' ? 'active' : ''}>Giveaway</Link></li>
-                      <li><Link href='/explore' className={router.pathname === '/explore' ? 'active' : ''}>Explore</Link></li>
-                  </ul>
+                  <div>
+                      <ul className="menu bg-base-100 w-full p-2 rounded-box font-semibold gap-2">
+                          <li><Link href='/' className={router.pathname === '/' ? 'btn-active' : ''}>Home</Link></li>
+                          <li><Link href='/leaderboard' className={router.pathname === '/leaderboard' ? 'btn-active' : ''}>Leaderboard</Link></li>
+                          <li><Link href='/giveaway' className={router.pathname === '/giveaway' ? 'btn-active' : ''}>Giveaway</Link></li>
+                          <li><Link href='/explore' className={router.pathname === '/explore' ? 'btn-active' : ''}>Explore</Link></li>
+                      </ul>
+                  </div>
               )
           }
       </>
