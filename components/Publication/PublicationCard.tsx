@@ -16,12 +16,6 @@ export default function PublicationCard({ publication }: Props) {
       {publication.metadata.image && (
         <MediaRenderer
           src={publication.metadata.image || ""}
-          style={{
-            width: "100%",
-            maxHeight: 400,
-            objectFit: "cover",
-            borderRadius: 16,
-          }}
           alt={publication.metadata.name}
         />
       )}
