@@ -34,6 +34,9 @@ import Profile from "../../types/Profile";
 import LoadingTopUserCard from "../../components/ui/TopUserCard/LoadingTopUserCard";
 import getProfilePublicationRevenue from "../../graphql/query/getProfilePublicationsRevenue";
 import {baseRevenue} from "../../util/revenue";
+import mutualFollowersProfiles from "../../graphql/query/mutualFollowersProfiles";
+import Link from "next/link";
+import Modal from "../../components/ui/Modal/Modal";
 
 /**
  * Dynamic route to display a Lens profile and their publications given a handle
@@ -43,6 +46,8 @@ export default function ProfilePage() {
   const [bestCommentator, setBestCommentator] = useState<{ profile: Profile, amount: number } | null>()
   const [profileRevenue, setProfileRevenue] = useState()
   const [followRevenue, setFollowRevenue] = useState()
+  const [openModal, setOpenModal] = useState(false)
+
   // Next.js Router: Load the user's handle from the URL
   const router = useRouter();
   const { handle } = router.query;
@@ -58,7 +63,7 @@ export default function ProfilePage() {
   const address = useAddress();
 
   // See if we need to sign the user in before they try follow a user
-  const { isSignedIn } = useLensUser();
+  const { isSignedIn, profile: userProfile } = useLensUser();
 
   // Load the same queries we did on the server-side.
   // Will load data instantly since it's already in the cache.
@@ -76,6 +81,14 @@ export default function ProfilePage() {
       enabled: !!profile,
     }
   );
+
+  const { data: mutualFollowers, isLoading: loadingMutualFollowers } = useQuery(
+      ["mutualFollowers"],
+      () => mutualFollowersProfiles(profile?.id as string, userProfile?.id as string),
+      {
+        enabled: !!profile && !!userProfile
+      }
+  )
 
   // Check to see if the connected wallet address follows this user
   const { data: doesFollow } = useQuery(
@@ -127,6 +140,10 @@ export default function ProfilePage() {
       getFollowReveue(profile).then(() => {})
     }
   }, [profile])
+
+  let closeModal = () => {
+    setOpenModal(false)
+  }
 
   async function getProfileRevenue(profile: Profile) {
     let revenue = JSON.parse(JSON.stringify(baseRevenue))
@@ -289,13 +306,62 @@ export default function ProfilePage() {
               <Image width={50} height={50} className={`w-28 h-28 -mt-12 rounded-full`} src={makeBlockie(profile.ownedBy)} alt={profile.name} />
           )
         }
-        <div className="flex flex-col md:flex-row my-4 w-full px-4 md:pr-4 md:px-0 md:items-center md:justify-between">
+        <div className="flex flex-col lg:flex-row my-4 w-full px-4 lg:pr-4 lg:px-0 lg:items-center lg:justify-between">
           <div>
             <h1 className="text-2xl font-semibold text-base-content md:text-left">{profile?.name}</h1>
-            <p className="text-secondary md:text-left">@{profile?.handle}</p>
-            <p className="text-sm text-base-content/80 md:text-left mb-6">{profile.bio}</p>
+            <p className="text-secondary md:text-left my-1">@{profile?.handle}</p>
+            <p className="text-sm text-base-content/80 md:text-left mb-4">{profile.bio}</p>
+            <div>
+              {
+                  loadingMutualFollowers && (
+                      <div className="w-32 h-6 rounded-xl bg-base-200 animate-pulse"></div>
+                  )
+              }
+              {
+                  mutualFollowers && mutualFollowers.length > 0 && (
+                      <div
+                          className="flex justify-center md:justify-start items-center gap-1 text-sm font-light cursor-pointer hover:underline"
+                          onClick={() => setOpenModal(true)}
+                      >
+                        Followed by {
+                        mutualFollowers.slice(0, 2).map((item: any, index: number) => (
+                            <>
+                              <div className="md:hidden">
+                                {
+                                  index === 1 ? (
+                                      <>{item.handle}</>
+                                  ) : (
+                                      <>{item.handle},</>
+                                  )
+                                }
+                              </div>
+                              <div className="hidden md:block">
+                                <div key={index} className="flex items-center gap-1">
+                                  {
+                                      item.picture && (
+                                          <MediaRenderer
+                                              src={item.picture.original?.url}
+                                              className='hidden rounded-full w-6 h-6 md:block'
+                                          />
+                                      )
+                                  }
+                                  <span>{item.handle}</span>
+                                </div>
+                              </div>
+                            </>
+                        ))
+                      }
+                        {
+                            mutualFollowers.length > 2 && (
+                                <>and {mutualFollowers.length - 2} more users your follow</>
+                            )
+                        }
+                      </div>
+                  )
+              }
+            </div>
 
-            <div className="mb-6">
+            <div className="mb-6 mt-2">
               <div className="flex justify-center text-center md:justify-start md:text-left gap-4">
                 <div>
                   <div className="text-md font-semibold">
@@ -337,6 +403,40 @@ export default function ProfilePage() {
           )}
         </div>
       </div>
+      <Modal isOpen={openModal} onClose={closeModal} title="Followers you know">
+        {
+            mutualFollowers && mutualFollowers.map((user: Profile, index: number) => (
+                <a href={`/profile/${user.handle}`} key={index}>
+                  <div
+                      className="flex items-center gap-2 cursor-pointer hover:bg-base-200  my-2 p-2 rounded-md"
+                      onClick={() => setOpenModal(false)}
+                  >
+                    <div>
+                      {
+                        user.picture && user.picture.original ? (
+                            <MediaRenderer
+                                src={user.picture.original.url}
+                                alt="user profile picture"
+                                className="rounded-full object-cover w-12 h-12"
+                            />
+                        ) : (
+                            <div className="w-12 h-12 rounded-full bg-base-200"></div>
+                        )
+                      }
+                    </div>
+                    <div>
+                      <div className="flex">
+                        <div className="font-semibold">{user.name}</div>
+                      </div>
+                      <div className="flex">
+                        <div className="text-sm">{user.handle}</div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+            ))
+        }
+      </Modal>
       <div className="mx-4 my-4">
         <div className="stats w-full stats-vertical sm:stats-horizontal md:shadow md:bg-base-200">
 
@@ -383,7 +483,7 @@ export default function ProfilePage() {
             {
                 profileRevenue && Object.values(profileRevenue).map((item: any, index) => (
                     <tr key={index}>
-                      <th className="">
+                      <th className="z-1">
                         <Image
                             src={`/assets/${item.asset.symbol.toLowerCase()}.svg`}
                             alt="asset token image"
@@ -391,7 +491,7 @@ export default function ProfilePage() {
                             height={25}
                         />
                       </th>
-                      <td className="text-right ">{ item.total } { item.asset.symbol }</td>
+                      <td className="text-right">{ item.total } { item.asset.symbol }</td>
                     </tr>
                 ))
             }
