@@ -35,7 +35,6 @@ import LoadingTopUserCard from "../../components/ui/TopUserCard/LoadingTopUserCa
 import getProfilePublicationRevenue from "../../graphql/query/getProfilePublicationsRevenue";
 import {baseRevenue} from "../../util/revenue";
 import mutualFollowersProfiles from "../../graphql/query/mutualFollowersProfiles";
-import Link from "next/link";
 import Modal from "../../components/ui/Modal/Modal";
 
 /**
