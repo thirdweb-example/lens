@@ -14,6 +14,7 @@
     "@thirdweb-dev/react": "^3.4.2",
     "@thirdweb-dev/sdk": "^3.4.2",
     "daisyui": "^2.33.0",
+    "ethereum-blockies-base64": "^1.0.2",
     "ethers": "^5.7.2",
     "graphql": "^16.6.0",
     "next": "13.0.0",

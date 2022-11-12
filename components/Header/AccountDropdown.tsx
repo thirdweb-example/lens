@@ -9,6 +9,7 @@ import {
 import useLensUser from "../../util/useLensUser";
 import login from "../../util/login";
 import Link from "next/link";
+import UserAvatar from "../ui/UserAvatar/UserAvatar";
 
 export default function AccountDropdown() {
     const sdk = useSDK();
@@ -112,17 +113,7 @@ export default function AccountDropdown() {
     return (
         <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                {
-                    profile.picture.__typename === 'MediaSet' ? (
-                        <div className="w-10 rounded-full">
-                            <MediaRenderer src={profile.picture.original.url || ""}/>
-                        </div>
-                    ) : (
-                        <div className="w-10 mask mask-hexagon">
-                            <MediaRenderer src={profile.picture.uri || ""}/>
-                        </div>
-                    )
-                }
+                <UserAvatar profile={profile} h="h-10" w="w-10" />
             </label>
             <ul tabIndex={0} className="p-2 shadow menu dropdown-content bg-base-200 rounded-box w-52">
                 <li>

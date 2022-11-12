@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
       <>
-          <nav className="navbar bg-base-100 justify-between gap-2">
+          <nav className="navbar bg-base-100 justify-between gap-2 mb-2">
               <div className="flex">
                   <img src='/icon.webp' alt='lenstats icon' className='mr-2 w-12 h-12' />
                   <div className="form-control mr-2 hidden lg:block">
@@ -37,10 +37,10 @@ export default function Header() {
                       />
                   </div>
                   <ul className="hidden lg:flex menu menu-horizontal font-semibold p-0 gap-2">
-                      <li><Link href='/' className={router.pathname === '/' ? 'btn-active' : ''}>Home</Link></li>
-                      <li><Link href='/leaderboard' className={router.pathname === '/leaderboard' ? 'btn-active' : ''}>Leaderboard</Link></li>
-                      <li><Link href='/giveaway' className={router.pathname === '/giveaway' ? 'btn-active' : ''}>Giveaway</Link></li>
-                      <li><Link href='/explore' className={router.pathname === '/explore' ? 'btn-active' : ''}>Explore</Link></li>
+                      <li><Link href='/' className={router.pathname === '/' ? 'active' : ''}>Home</Link></li>
+                      <li><Link href='/leaderboard' className={router.pathname === '/leaderboard' ? 'active' : ''}>Leaderboard</Link></li>
+                      <li><Link href='/giveaway' className={router.pathname === '/giveaway' ? 'active' : ''}>Giveaway</Link></li>
+                      <li><Link href='/explore' className={router.pathname === '/explore' ? 'active' : ''}>Explore</Link></li>
                   </ul>
               </div>
               <div className="flex gap-2">
@@ -64,10 +64,10 @@ export default function Header() {
               isOpen && (
                   <div>
                       <ul className="menu bg-base-100 w-full p-2 rounded-box font-semibold gap-2">
-                          <li><Link href='/' className={router.pathname === '/' ? 'btn-active' : ''}>Home</Link></li>
-                          <li><Link href='/leaderboard' className={router.pathname === '/leaderboard' ? 'btn-active' : ''}>Leaderboard</Link></li>
-                          <li><Link href='/giveaway' className={router.pathname === '/giveaway' ? 'btn-active' : ''}>Giveaway</Link></li>
-                          <li><Link href='/explore' className={router.pathname === '/explore' ? 'btn-active' : ''}>Explore</Link></li>
+                          <li><Link href='/' className={router.pathname === '/' ? 'active' : ''}>Home</Link></li>
+                          <li><Link href='/leaderboard' className={router.pathname === '/leaderboard' ? 'active' : ''}>Leaderboard</Link></li>
+                          <li><Link href='/giveaway' className={router.pathname === '/giveaway' ? 'active' : ''}>Giveaway</Link></li>
+                          <li><Link href='/explore' className={router.pathname === '/explore' ? 'active' : ''}>Explore</Link></li>
                       </ul>
                   </div>
               )

@@ -2,13 +2,17 @@ import {useRouter} from "next/router";
 import {useQuery} from "@tanstack/react-query";
 import searchProfiles from "../graphql/query/searchProfiles";
 import Link from "next/link";
+import {MediaRenderer} from "@thirdweb-dev/react";
+import makeBlockie from 'ethereum-blockies-base64'
+import UserAvatar from "../components/ui/UserAvatar/UserAvatar";
+import {useEffect} from "react";
 
 export default function Profiles() {
     const router = useRouter()
     const { search } = router.query
 
     const { data, isLoading } = useQuery(
-        ["searchProfiles"],
+        ["searchProfiles", search],
         () => searchProfiles(search as string)
     );
 
@@ -21,12 +25,23 @@ export default function Profiles() {
     }
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col space-y-3 w-1/2">
             {
                 data.map((profile, index) => (
                     <Link href={`/profile/${profile.handle}`} style={{ textDecoration: 'none' }} key={index}>
-                        <div className="flex p-4 rounded-xl bg-base-200">
-                            {profile.profileId}
+                        <div className="flex h-28 items-center p-4 rounded-xl bg-base-200 gap-6 hover:shadow">
+                            <UserAvatar profile={profile} h="h-16" w="w-16" />
+                            <div className="flex flex-col">
+                                <div className="text-xl text-base-content font-semibold">
+                                    {profile.name || profile.handle}
+                                </div>
+                                <div className="text-md text-secondary">
+                                    @{profile.handle}
+                                </div>
+                                <div className="text-sm text-base-content/80">
+                                    {profile.bio}
+                                </div>
+                            </div>
                         </div>
                     </Link>
                 ))

@@ -54,7 +54,7 @@ const search = `
         }
       }
     }
-
+    ownedBy
     stats {
       totalFollowers
       totalFollowing
@@ -67,6 +67,7 @@ async function searchProfiles(query: string): Promise<ProfileSeachResult[]> {
         query,
         type: 'PROFILE'
     }).toPromise();
+    console.log(response.data.search.items)
     return response.data.search.items as ProfileSeachResult[];
 }
 

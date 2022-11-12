@@ -24,7 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
         {/* For React Query supporting SSR */}
         <Hydrate state={pageProps.dehydratedState}>
           <Header />
-          <div className='flex justify-center mt-6'>
+          <div className='flex justify-center'>
             <Script strategy="lazyOnload" src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}></Script>
             <Script id="google-analytics" strategy="lazyOnload">
               {`

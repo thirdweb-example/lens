@@ -22,6 +22,22 @@ query Profile($address: EthereumAddress!) {
         }
       }
     }
+    coverPicture {
+      ... on NftImage {
+        contractAddress
+        tokenId
+        uri
+        chainId
+        verified
+      }
+      ... on MediaSet {
+        original {
+          url
+          mimeType
+        }
+      }
+    }
+    ownedBy
     handle
   }
 }
