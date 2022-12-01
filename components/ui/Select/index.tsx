@@ -25,7 +25,16 @@ export default class Select extends Component<Props> {
                             className="relative w-full cursor-default border border-gray-200 dark:border-gray-600 rounded-lg bg-base-300 py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                             {
                                 this.props.selected ? (
-                                    <span className="block truncate">{this.props.selected.name}</span>
+                                    <span className="block truncate flex items-center justify-between">
+                                        <div>{this.props.selected.name}</div>
+                                        <div>
+                                            <img
+                                                src={`assets/${this.props.selected.symbol}.svg`}
+                                                alt={`${this.props.selected.symbol} logo`}
+                                                className="w-6 h-6 rounded-full"
+                                            />
+                                        </div>
+                                    </span>
                                 ) : (
                                     <span className="block truncate">Choose a currency</span>
                                 )
@@ -46,24 +55,33 @@ export default class Select extends Component<Props> {
                         >
                             <Listbox.Options
                                 className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-base-300 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {this.props.list.map((person: any, personIdx: any) => (
+                                {this.props.list.map((item: any, index: any) => (
                                     <Listbox.Option
-                                        key={personIdx}
+                                        key={index}
                                         className={({active}) =>
                                             `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                                                 active ? 'bg-base-100' : ''
                                             }`
                                         }
-                                        value={person}
+                                        value={item}
                                     >
                                         {({selected}) => (
                                             <>
                       <span
-                          className={`block truncate ${
+                          className={`block truncate flex items-center justify-between ${
                               selected ? 'font-medium' : 'font-normal'
                           }`}
                       >
-                        {person.name}
+                          <div>
+                              {item.name}
+                          </div>
+                          <div>
+                            <img
+                                src={`assets/${item.symbol}.svg`}
+                                alt={`${item.symbol} logo`}
+                                className="w-6 h-6 rounded-full"
+                            />
+                        </div>
                       </span>
                                                 {selected ? (
                                                     <span

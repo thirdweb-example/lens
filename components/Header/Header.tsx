@@ -40,7 +40,6 @@ export default function Header() {
                       <li><Link href='/' className={router.pathname === '/' ? 'active' : ''}>Home</Link></li>
                       <li><Link href='/leaderboard' className={router.pathname === '/leaderboard' ? 'active' : ''}>Leaderboard</Link></li>
                       <li><Link href='/giveaway' className={router.pathname === '/giveaway' ? 'active' : ''}>Giveaway</Link></li>
-                      <li><Link href='/explore' className={router.pathname === '/explore' ? 'active' : ''}>Explore</Link></li>
                   </ul>
               </div>
               <div className="flex gap-2">

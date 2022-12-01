@@ -5,20 +5,18 @@ import getPublications from '../../graphql/query/getPublications'
 import {useEffect, useState} from "react";
 import {getStats} from "../../graphql/query/getStats";
 import Profile from "../../types/Profile";
-import {ChainId, MediaRenderer, useAddress, useNetwork, useNetworkMismatch, useSDK} from "@thirdweb-dev/react";
-import login from "../../util/login";
+import { MediaRenderer, useAddress } from "@thirdweb-dev/react";
 import ModuleSelector from "./ModuleSelector";
 import BestModule from "./Form/BestModule";
-import {add} from "@noble/hashes/_u64";
 
 export default function Giveaway() {
     const [bestCollector, setBestCollector] = useState<{ profile: Profile, amount: number } | null>()
     const [bestCommentator, setBestCommentator] = useState<{ profile: Profile, amount: number } | null>()
     const [selected, setSelected] = useState<{ id: number, name: string } | null>();
-    const {profile, isSignedIn, setIsSignedIn } = useLensUser()
+    const {profile, isSignedIn } = useLensUser()
     const address = useAddress();
 
-    const {data: publications, isLoading: loadingPublications} = useQuery(
+    const { data: publications } = useQuery(
         ["publications"],
         () => getPublications(profile?.id as string),
         {
@@ -110,19 +108,25 @@ export default function Giveaway() {
                         if (selected) {
                             switch (selected.id) {
                                 case 1:
-                                    return <BestModule
-                                        label={selected.name}
-                                        winner={bestCollector?.profile}
-                                        address={address}
-                                        currencies={CURRENCIES}
-                                    />
+                                    if (bestCollector) {
+                                        return <BestModule
+                                            label={selected.name}
+                                            winner={bestCollector.profile}
+                                            address={address}
+                                            currencies={CURRENCIES}
+                                        />
+                                    }
+                                    break;
                                 case 2:
-                                    return <BestModule
-                                        label={selected.name}
-                                        winner={bestCommentator?.profile}
-                                        address={address}
-                                        currencies={CURRENCIES}
-                                    />
+                                    if (bestCommentator) {
+                                        return <BestModule
+                                            label={selected.name}
+                                            winner={bestCommentator.profile}
+                                            address={address}
+                                            currencies={CURRENCIES}
+                                        />
+                                    }
+                                    break;
                                 default:
                                     return <div className="text-gray-500">Comming Soon</div>
                             }

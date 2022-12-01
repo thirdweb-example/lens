@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import mostFollowedProfiles from "../graphql/query/mostFollowedProfiles";
-import styles from "../styles/Home.module.css";
-import Image from "next/image";
-import { MediaRenderer } from "@thirdweb-dev/react";
 import globalProtocolStats from "../graphql/query/globalProtocolStats";
+import Seo from "../components/SEO/Seo";
+import {APP_NAME} from "../constants";
 
 export default function Home() {
   const { data, isLoading } = useQuery(
@@ -28,6 +26,7 @@ export default function Home() {
 
   return (
     <>
+      <Seo />
       <div className='flex flex-row lg:flex-col'>
         <div className="stats stats-vertical lg:shadow lg:bg-base-200 lg:stats-horizontal lg:my-4">
 

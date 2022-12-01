@@ -36,6 +36,8 @@ import getProfilePublicationRevenue from "../../graphql/query/getProfilePublicat
 import {baseRevenue} from "../../util/revenue";
 import mutualFollowersProfiles from "../../graphql/query/mutualFollowersProfiles";
 import Modal from "../../components/ui/Modal/Modal";
+import Seo from "../../components/SEO/Seo";
+import {APP_NAME} from "../../constants";
 
 /**
  * Dynamic route to display a Lens profile and their publications given a handle
@@ -270,256 +272,271 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="w-full">
-      {
-        profile.coverPicture ? (
-            <MediaRenderer
-                src={profile.coverPicture.original.url}
-                style={{objectFit: "cover"}}
-                className="w-full h-72"
-            />
+      <>
+        {profile?.name ? (
+            <Seo title={`${profile?.name} | ${APP_NAME}`} />
         ) : (
-            <div className="w-full h-64 bg-gray-600"></div>
-        )
-      }
-      <div className="flex flex-col md:flex-row text-center items-center md:items-start bg-base-300 md:gap-6">
-        {
-          profile.picture ? (
-              <>
-                {
-                  profile.picture.__typename === 'MediaSet' ? (
-                      <MediaRenderer
-                          src={profile.picture.original.url || ""}
-                          style={{objectFit: "cover"}}
-                          className="w-28 h-28 -mt-12 rounded-md shadow-xl md:ml-20 md:w-56 md:h-56"
-                      />
-                  ) : (
-                      <MediaRenderer
-                          src={profile.picture.uri || ""}
-                          className={`w-28 h-28 -mt-12 mask mask-hexagon md:ml-20 md:w-56 md:h-56`}
-                      />
-                  )
-                }
-              </>
-          ) : (
-              <Image width={50} height={50} className={`w-28 h-28 -mt-12 rounded-full`} src={makeBlockie(profile.ownedBy)} alt={profile.name} />
-          )
-        }
-        <div className="flex flex-col lg:flex-row my-4 w-full px-4 lg:pr-4 lg:px-0 lg:items-center lg:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-base-content md:text-left">{profile?.name}</h1>
-            <p className="text-secondary md:text-left my-1">@{profile?.handle}</p>
-            <p className="text-sm text-base-content/80 md:text-left mb-4">{profile.bio}</p>
-            <div>
-              {
-                  loadingMutualFollowers && (
-                      <div className="w-32 h-6 rounded-xl bg-base-200 animate-pulse"></div>
-                  )
-              }
-              {
-                  mutualFollowers && mutualFollowers.length > 0 && (
-                      <div
-                          className="flex justify-center md:justify-start items-center gap-1 text-sm font-light cursor-pointer hover:underline"
-                          onClick={() => setOpenModal(true)}
-                      >
-                        Followed by {
-                        mutualFollowers.slice(0, 2).map((item: any, index: number) => (
-                            <>
-                              <div className="md:hidden">
-                                {
-                                  index === 1 ? (
-                                      <>{item.handle}</>
-                                  ) : (
-                                      <>{item.handle},</>
-                                  )
-                                }
-                              </div>
-                              <div className="hidden md:block">
-                                <div key={index} className="flex items-center gap-1">
-                                  {
-                                      item.picture && (
-                                          <MediaRenderer
-                                              src={item.picture.original?.url}
-                                              className='hidden rounded-full w-6 h-6 md:block'
-                                          />
+            <Seo title={`@${profile?.handle} | ${APP_NAME}`} />
+        )}
+        <div className="w-full">
+          {
+            profile.coverPicture ? (
+                <MediaRenderer
+                    src={profile.coverPicture.original.url}
+                    style={{objectFit: "cover"}}
+                    className="w-full h-72"
+                />
+            ) : (
+                <div className="w-full h-64 bg-gray-600"></div>
+            )
+          }
+          <div className="flex flex-col md:flex-row text-center items-center md:items-start bg-base-300 md:gap-6">
+            {
+              profile.picture ? (
+                  <>
+                    {
+                      profile.picture.__typename === 'MediaSet' ? (
+                          <MediaRenderer
+                              src={profile.picture.original.url || ""}
+                              style={{objectFit: "cover"}}
+                              className="w-28 h-28 -mt-12 rounded-md shadow-xl md:ml-20 md:w-56 md:h-56"
+                          />
+                      ) : (
+                          <MediaRenderer
+                              src={profile.picture.uri || ""}
+                              className={`w-28 h-28 -mt-12 mask mask-hexagon md:ml-20 md:w-56 md:h-56`}
+                          />
+                      )
+                    }
+                  </>
+              ) : (
+                  <Image width={50} height={50} className={`w-28 h-28 -mt-12 rounded-full`} src={makeBlockie(profile.ownedBy)} alt={profile.name} />
+              )
+            }
+            <div className="flex flex-col lg:flex-row my-4 w-full px-4 lg:pr-4 lg:px-0 lg:items-center lg:justify-between">
+              <div>
+                <h1 className="text-2xl font-semibold text-base-content md:text-left">{profile?.name}</h1>
+                <p className="text-secondary md:text-left my-1">@{profile?.handle}</p>
+                <p className="text-sm text-base-content/80 md:text-left mb-4">{profile.bio}</p>
+                <div>
+                  {
+                      loadingMutualFollowers && (
+                          <div className="w-32 h-6 rounded-xl bg-base-200 animate-pulse"></div>
+                      )
+                  }
+                  {
+                      mutualFollowers && mutualFollowers.length > 0 && (
+                          <div
+                              className="flex justify-center md:justify-start items-center gap-1 text-sm font-light cursor-pointer hover:underline"
+                              onClick={() => setOpenModal(true)}
+                          >
+                            Followed by {
+                            mutualFollowers.slice(0, 2).map((item: any, index: number) => (
+                                <>
+                                  <div className="md:hidden">
+                                    {
+                                      index === 1 ? (
+                                          <>{item.handle}</>
+                                      ) : (
+                                          <>{item.handle},</>
                                       )
-                                  }
-                                  <span>{item.handle}</span>
-                                </div>
-                              </div>
-                            </>
-                        ))
-                      }
-                        {
-                            mutualFollowers.length > 2 && (
-                                <>and {mutualFollowers.length - 2} more users your follow</>
-                            )
-                        }
-                      </div>
-                  )
-              }
-            </div>
+                                    }
+                                  </div>
+                                  <div className="hidden md:block">
+                                    <div key={index} className="flex items-center gap-1">
+                                      {
+                                          item.picture && (
+                                              <MediaRenderer
+                                                  src={item.picture.original?.url}
+                                                  className='hidden rounded-full w-6 h-6 md:block'
+                                              />
+                                          )
+                                      }
+                                      <span>{item.handle}</span>
+                                    </div>
+                                  </div>
+                                </>
+                            ))
+                          }
+                            {
+                                mutualFollowers.length > 2 && (
+                                    <>and {mutualFollowers.length - 2} more users your follow</>
+                                )
+                            }
+                          </div>
+                      )
+                  }
+                </div>
 
-            <div className="mb-6 mt-2">
-              <div className="flex justify-center text-center md:justify-start md:text-left gap-4">
-                <div>
-                  <div className="text-md font-semibold">
-                    { profile.stats.totalFollowers }
-                  </div>
-                  <div className="text-base-content/50">
-                    Followers
-                  </div>
-                </div>
-                <div>
-                  <div className="text-md font-semibold">
-                    { profile.stats.totalFollowing }
-                  </div>
-                  <div className="text-base-content/50">
-                    Following
-                  </div>
-                </div>
-                <div>
-                  <div className="text-md font-semibold">
-                    { profile.stats.totalPublications }
-                  </div>
-                  <div className="text-base-content/50">
-                    Publications
+                <div className="mb-6 mt-2">
+                  <div className="flex justify-center text-center md:justify-start md:text-left gap-4">
+                    <div>
+                      <div className="text-md font-semibold">
+                        { profile.stats.totalFollowers }
+                      </div>
+                      <div className="text-base-content/50">
+                        Followers
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-md font-semibold">
+                        { profile.stats.totalFollowing }
+                      </div>
+                      <div className="text-base-content/50">
+                        Following
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-md font-semibold">
+                        { profile.stats.totalPublications }
+                      </div>
+                      <div className="text-base-content/50">
+                        Publications
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {doesFollow ? (
+                  <button className="btn btn-error btn-outline" onClick={() => unfollow()}>Unfollow</button>
+              ) : (
+                  <button
+                      className="btn btn-success"
+                      onClick={() => follow()}
+                  >
+                    Follow
+                  </button>
+              )}
             </div>
           </div>
+          <Modal isOpen={openModal} onClose={closeModal} title="Followers you know">
+            {
+                mutualFollowers && mutualFollowers.map((user: Profile, index: number) => (
+                    <a href={`/profile/${user.handle}`} key={index}>
+                      <div
+                          className="flex items-center gap-2 cursor-pointer hover:bg-base-200  my-2 p-2 rounded-md"
+                          onClick={() => setOpenModal(false)}
+                      >
+                        <div>
+                          {
+                            user.picture && user.picture.original ? (
+                                <MediaRenderer
+                                    src={user.picture.original.url}
+                                    alt="user profile picture"
+                                    className="rounded-full object-cover w-12 h-12"
+                                />
+                            ) : (
+                                <div className="w-12 h-12 rounded-full bg-base-200"></div>
+                            )
+                          }
+                        </div>
+                        <div>
+                          <div className="flex">
+                            <div className="font-semibold">{user.name}</div>
+                          </div>
+                          <div className="flex">
+                            <div className="text-sm">{user.handle}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                ))
+            }
+          </Modal>
+          <div className="mx-4 my-4">
+            <div className="stats w-full stats-vertical sm:stats-horizontal md:shadow md:bg-base-200">
 
-          {doesFollow ? (
-              <button className="btn btn-error btn-outline" onClick={() => unfollow()}>Unfollow</button>
-          ) : (
-              <button
-                  className="btn btn-success"
-                  onClick={() => follow()}
-              >
-                Follow
-              </button>
-          )}
-        </div>
-      </div>
-      <Modal isOpen={openModal} onClose={closeModal} title="Followers you know">
-        {
-            mutualFollowers && mutualFollowers.map((user: Profile, index: number) => (
-                <a href={`/profile/${user.handle}`} key={index}>
-                  <div
-                      className="flex items-center gap-2 cursor-pointer hover:bg-base-200  my-2 p-2 rounded-md"
-                      onClick={() => setOpenModal(false)}
-                  >
-                    <div>
-                      {
-                        user.picture && user.picture.original ? (
-                            <MediaRenderer
-                                src={user.picture.original.url}
-                                alt="user profile picture"
-                                className="rounded-full object-cover w-12 h-12"
+              <div className="stat">
+                <div className="stat-title">Posts</div>
+                <div className="stat-value">{ profile.stats.totalPosts }</div>
+              </div>
+
+              <div className="stat">
+                <div className="stat-title">Collects</div>
+                <div className="stat-value">{ profile.stats.totalCollects }</div>
+              </div>
+
+              <div className="stat">
+                <div className="stat-title">Comments</div>
+                <div className="stat-value">{ profile.stats.totalComments }</div>
+              </div>
+
+              <div className="stat">
+                <div className="stat-title">Mirrors</div>
+                <div className="stat-value">{ profile.stats.totalMirrors }</div>
+              </div>
+
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-4">
+            {
+              bestCollector ? (
+                  <TopUserCard profile={bestCollector.profile} title="Top collector" label="Post Collected" amount={bestCollector.amount} />
+              ) : (
+                  <LoadingTopUserCard title="Top Collector" />
+              )
+            }
+            {
+              bestCommentator ? (
+                  <TopUserCard profile={bestCommentator.profile} title="Top Commentator" label="Post Commented" amount={bestCommentator.amount} />
+              ) : (
+                  <LoadingTopUserCard title="Top Commentator" />
+              )
+            }
+            <div className="bg-base-200 rounded-xl flex flex-col justify-between px-2 py-4">
+              <div className="flex justify-center">
+                <p className="text-2xl font-semibold my-2">Posts Revenue</p>
+              </div>
+              <div className="flex items-center">
+                <table className="table w-full">
+                  <tbody>
+                  {
+                      profileRevenue && Object.values(profileRevenue).map((item: any, index) => (
+                          <tr key={index}>
+                            <td className="z-1">
+                              <Image
+                                  src={`/assets/${item.asset.symbol}.svg`}
+                                  alt="asset token image"
+                                  width={25}
+                                  height={25}
+                              />
+                            </td>
+                            <td className="text-right">{ item.total } { item.asset.symbol }</td>
+                          </tr>
+                      ))
+                  }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="bg-base-200 rounded-xl flex flex-col justify-between px-2 py-4">
+              <div className="flex justify-center">
+                <p className="text-2xl font-semibold my-2">Follow Revenue</p>
+              </div>
+              <table className="table w-full">
+                <tbody>
+                {
+                    followRevenue && Object.values(followRevenue).map((item: any, index) => (
+                        <tr key={index}>
+                          <th className="">
+                            <Image
+                                src={`/assets/${item.asset.symbol}.svg`}
+                                alt="asset token image"
+                                width={25}
+                                height={25}
                             />
-                        ) : (
-                            <div className="w-12 h-12 rounded-full bg-base-200"></div>
-                        )
-                      }
-                    </div>
-                    <div>
-                      <div className="flex">
-                        <div className="font-semibold">{user.name}</div>
-                      </div>
-                      <div className="flex">
-                        <div className="text-sm">{user.handle}</div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-            ))
-        }
-      </Modal>
-      <div className="mx-4 my-4">
-        <div className="stats w-full stats-vertical sm:stats-horizontal md:shadow md:bg-base-200">
-
-          <div className="stat">
-            <div className="stat-title">Posts</div>
-            <div className="stat-value">{ profile.stats.totalPosts }</div>
+                          </th>
+                          <td className="text-right ">{ item.total } { item.asset.symbol }</td>
+                        </tr>
+                    ))
+                }
+                </tbody>
+              </table>
+            </div>
           </div>
-
-          <div className="stat">
-            <div className="stat-title">Collects</div>
-            <div className="stat-value">{ profile.stats.totalCollects }</div>
-          </div>
-
-          <div className="stat">
-            <div className="stat-title">Comments</div>
-            <div className="stat-value">{ profile.stats.totalComments }</div>
-          </div>
-
-          <div className="stat">
-            <div className="stat-title">Mirrors</div>
-            <div className="stat-value">{ profile.stats.totalMirrors }</div>
-          </div>
-
         </div>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-4">
-        {
-          bestCollector ? (
-                <TopUserCard profile={bestCollector.profile} title="Top collector" label="Post Collected" amount={bestCollector.amount} />
-            ) : (
-              <LoadingTopUserCard title="Top Collector" />
-          )
-        }
-        {
-            bestCommentator ? (
-                <TopUserCard profile={bestCommentator.profile} title="Top Commentator" label="Post Commented" amount={bestCommentator.amount} />
-            ) : (
-                <LoadingTopUserCard title="Top Commentator" />
-            )
-        }
-        <div className="bg-base-200 px-4 py-4 rounded-xl">
-          <table className="table w-full h-full">
-            <tbody>
-            {
-                profileRevenue && Object.values(profileRevenue).map((item: any, index) => (
-                    <tr key={index}>
-                      <th className="z-1">
-                        <Image
-                            src={`/assets/${item.asset.symbol.toLowerCase()}.svg`}
-                            alt="asset token image"
-                            width={25}
-                            height={25}
-                        />
-                      </th>
-                      <td className="text-right">{ item.total } { item.asset.symbol }</td>
-                    </tr>
-                ))
-            }
-            </tbody>
-          </table>
-        </div>
-        <div className="bg-base-200 px-4 py-4 rounded-xl">
-          <table className="table w-full h-full">
-            <tbody>
-            {
-                followRevenue && Object.values(followRevenue).map((item: any, index) => (
-                    <tr key={index}>
-                      <th className="">
-                        <Image
-                            src={`/assets/${item.asset.symbol.toLowerCase()}.svg`}
-                            alt="asset token image"
-                            width={25}
-                            height={25}
-                        />
-                      </th>
-                      <td className="text-right ">{ item.total } { item.asset.symbol }</td>
-                    </tr>
-                ))
-            }
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+      </>
   );
 }
 

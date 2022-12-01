@@ -8,3 +8,18 @@
     font-weight: 400;
     src: url('/fonts/SF-Pro-Rounded-Regular.ttf') format('truetype');
 }
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.scrollbar-hide::-webkit-scrollbar-thumb {
+    background-color: gray;
+    border-radius: 20px;
+    border: 3px solid transparent;
+}
