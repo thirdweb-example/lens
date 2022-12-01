@@ -40,7 +40,7 @@ export default function LeaderBoard () {
                 isLoading ? (
                     <div>Loading</div>
                 ) : (
-                    <div className="px-6 pb-6 h-3/5 w-full rounded-xl">
+                    <div className="pb-6 h-3/5 w-full rounded-xl">
                         <table className="table w-full">
                             <thead>
                             <tr>
