@@ -10,6 +10,7 @@ import Link from "next/link";
 import styles from "./Header.module.css";
 import useLensUser from "../../util/useLensUser";
 import login from "../../util/login";
+import Image from "next/image";
 
 export default function Header() {
   const sdk = useSDK();
@@ -34,7 +35,7 @@ export default function Header() {
   return (
     <div className={styles.container}>
       <Link href="/" className={styles.homeNavigator}>
-        <img src="/lens.jpeg" alt="Lens Logo" className={styles.logo} />
+        <Image src="/lens.jpeg" alt="Lens Logo" height={36} width={36} />
         <h1 className={styles.logoText}>Lens Starter Kit</h1>
       </Link>
 
@@ -48,7 +49,7 @@ export default function Header() {
     if (!address) {
       return (
         <div style={{ marginRight: 12 }}>
-          <ConnectWallet accentColor="#f213a4" />
+          <ConnectWallet />
         </div>
       );
     }
