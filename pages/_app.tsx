@@ -1,23 +1,23 @@
-import type { AppProps } from "next/app";
-import { ThirdwebProvider, ChainId } from "@thirdweb-dev/react";
 import {
   Hydrate,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import "../styles/globals.css";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
+import type { AppProps } from "next/app";
 import Header from "../components/Header/Header";
+import "../styles/globals.css";
 
 export default function App({ Component, pageProps }: AppProps) {
   // Initialize React Query Client
   const queryClient = new QueryClient();
 
   // Specify what network you're going to interact with
-  const desiredChainId = ChainId.Polygon;
+  const activeChain = "mumbai";
 
   return (
     // For thirdweb functionality
-    <ThirdwebProvider desiredChainId={desiredChainId}>
+    <ThirdwebProvider activeChain={activeChain}>
       {/* For React Query functionality */}
       <QueryClientProvider client={queryClient}>
         {/* For React Query supporting SSR */}
