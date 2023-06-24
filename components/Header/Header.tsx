@@ -48,7 +48,7 @@ export default function Header() {
     if (!address) {
       return (
         <div style={{ marginRight: 12 }}>
-          <ConnectWallet accentColor="#f213a4" />
+          <ConnectWallet />
         </div>
       );
     }
